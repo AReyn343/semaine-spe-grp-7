@@ -29,6 +29,29 @@ services:
       mysql:
         condition: service_healthy
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: mademo-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: mademo-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
   # ─────────────────────────────────────────
   # 🗄 phpMyAdmin (interface MySQL)
   # ─────────────────────────────────────────
@@ -47,3 +70,4 @@ services:
 
 volumes:
   mysql_data:
+  grafana_data:

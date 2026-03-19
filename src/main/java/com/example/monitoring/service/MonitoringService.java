@@ -1,6 +1,6 @@
 package com.example.monitoring.service;
 
-import com.example.metier.service.DashboardService;
+import com.example.metier.entity.PlayerStats;
 import com.example.metier.service.DataLoaderService;
 import com.example.metier.service.MatchService;
 import com.example.metier.service.PlayerStatsService;
@@ -13,12 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-/**
- * Cœur du monitoring.
- * Enregistre les métriques Micrometer custom et fournit un snapshot
- * des valeurs courantes pour le dashboard et les alertes.
- */
 @Service
 public class MonitoringService {
 
@@ -27,7 +23,6 @@ public class MonitoringService {
     private final PlayerStatsService  playerStatsService;
     private final DataLoaderService   dataLoader;
 
-    // Compteurs
     private Counter dashboardRequestCounter;
 
     public MonitoringService(MeterRegistry registry,
@@ -43,79 +38,120 @@ public class MonitoringService {
     @PostConstruct
     public void registerMetrics() {
 
-        // ── Métriques métier jeu (Gauge — valeur dynamique) ──────
+        // ── Métriques globales ────────────────────────────────────
         Gauge.builder("game_matches_total", matchService, s -> s.countTotal())
-             .description("Nombre total de matchs")
-             .tag("app", "groupe7")
-             .register(registry);
+             .description("Nombre total de matchs").tag("app", "groupe7").register(registry);
 
         Gauge.builder("game_matches_active", matchService, s -> s.countActive())
-             .description("Matchs en cours (IN_PROGRESS)")
-             .tag("app", "groupe7")
-             .register(registry);
+             .description("Matchs en cours").tag("app", "groupe7").register(registry);
 
         Gauge.builder("game_players_active", playerStatsService, s -> s.countActive())
-             .description("Joueurs actifs")
+             .description("Joueurs actifs").tag("app", "groupe7").register(registry);
+
+        Gauge.builder("game_match_duration_avg_seconds", matchService, s -> s.averageDurationSeconds())
+             .description("Durée moyenne des matchs").tag("app", "groupe7").register(registry);
+
+        // ── Joueurs connectés par région ──────────────────────────
+        for (String region : List.of("EUW", "NA", "KR")) {
+            Gauge.builder("game_players_connected_by_region", dataLoader,
+                    dl -> dl.getServers().stream()
+                            .filter(s -> region.equals(s.getRegion()))
+                            .mapToInt(s -> s.getConnectedPlayers()).sum())
+                 .description("Joueurs connectés par région")
+                 .tag("app", "groupe7")
+                 .tag("region", region)
+                 .register(registry);
+        }
+
+        // ── Matchs en cours par mode ──────────────────────────────
+        for (String mode : List.of("RANKED_SOLO", "RANKED_FLEX", "NORMAL_DRAFT", "ARAM")) {
+            Gauge.builder("game_matches_active_by_mode", dataLoader,
+                    dl -> dl.getMatches().stream()
+                            .filter(m -> "IN_PROGRESS".equals(m.getStatus()) && mode.equals(m.getMode()))
+                            .count())
+                 .description("Matchs actifs par mode")
+                 .tag("app", "groupe7")
+                 .tag("mode", mode)
+                 .register(registry);
+        }
+
+        // ── KDA moyen ─────────────────────────────────────────────
+        Gauge.builder("game_player_kda_avg", dataLoader,
+                dl -> dl.getPlayerStats().stream()
+                        .mapToDouble(p -> (p.getKills() + p.getAssists()) /
+                                         (double) Math.max(1, p.getDeaths()))
+                        .average().orElse(0.0))
+             .description("KDA moyen des joueurs")
              .tag("app", "groupe7")
              .register(registry);
 
-        Gauge.builder("game_players_connected", dataLoader,
-                      dl -> dl.getServers().stream().mapToInt(s -> s.getConnectedPlayers()).sum())
-             .description("Joueurs connectés (somme des serveurs)")
+        // ── CS moyen par minute ───────────────────────────────────
+        Gauge.builder("game_player_cs_per_min_avg", dataLoader,
+                dl -> dl.getPlayerStats().stream()
+                        .filter(p -> p.getPlayTimeSeconds() > 60)
+                        .mapToDouble(p -> p.getCs() / (p.getPlayTimeSeconds() / 60.0))
+                        .average().orElse(0.0))
+             .description("CS moyen par minute")
              .tag("app", "groupe7")
              .register(registry);
 
+        // ── Top champions (top 5) ─────────────────────────────────
+        registerTopChampions();
+
+        // ── Distribution des tiers ────────────────────────────────
+        for (String tier : List.of("IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "CHALLENGER")) {
+            Gauge.builder("game_players_by_tier", dataLoader,
+                    dl -> dl.getPlayerStats().stream()
+                            .filter(p -> tier.equals(p.getTier()))
+                            .count())
+                 .description("Joueurs par tier")
+                 .tag("app", "groupe7")
+                 .tag("tier", tier)
+                 .register(registry);
+        }
+
+        // ── Charge serveurs ───────────────────────────────────────
         Gauge.builder("game_server_load_avg", dataLoader,
-                      dl -> dl.getServers().stream()
-                              .mapToDouble(s -> s.getLoad())
-                              .average().orElse(0.0))
-             .description("Charge moyenne des serveurs")
-             .tag("app", "groupe7")
-             .register(registry);
+                dl -> dl.getServers().stream().mapToDouble(s -> s.getLoad()).average().orElse(0.0))
+             .description("Charge moyenne des serveurs").tag("app", "groupe7").register(registry);
 
-        Gauge.builder("game_match_duration_avg_seconds", matchService,
-                      s -> s.averageDurationSeconds())
-             .description("Durée moyenne des matchs terminés")
-             .tag("app", "groupe7")
-             .register(registry);
-
-        Gauge.builder("game_player_elo_avg", playerStatsService,
-                      s -> s.averageElo())
-             .description("ELO moyen des joueurs")
-             .tag("app", "groupe7")
-             .register(registry);
-
-        // ── Compteur de requêtes dashboard ───────────────────────
+        // ── Compteur dashboard ────────────────────────────────────
         dashboardRequestCounter = Counter.builder("game_dashboard_requests_total")
-             .description("Nombre d'appels à GET /api/dashboard")
-             .tag("app", "groupe7")
-             .register(registry);
+             .description("Appels à GET /api/dashboard").tag("app", "groupe7").register(registry);
     }
 
-    /** Incrémente le compteur à chaque appel dashboard */
-    public void recordDashboardRequest() {
-        if (dashboardRequestCounter != null) {
-            dashboardRequestCounter.increment();
+    private void registerTopChampions() {
+        // On enregistre un Gauge par champion pour les 20 champions possibles
+        for (String champion : List.of(
+                "Ahri","Zed","Jinx","Thresh","Lee Sin","Darius","Lux",
+                "Yasuo","Vayne","Blitzcrank","Orianna","Katarina","Ezreal",
+                "Morgana","Vi","Caitlyn","Syndra","Jhin","Yone","Garen")) {
+            Gauge.builder("game_champion_players", dataLoader,
+                    dl -> dl.getPlayerStats().stream()
+                            .filter(p -> champion.equals(p.getChampion()))
+                            .count())
+                 .description("Joueurs par champion")
+                 .tag("app", "groupe7")
+                 .tag("champion", champion)
+                 .register(registry);
         }
     }
 
-    /** Snapshot des métriques métier actuelles */
+    public void recordDashboardRequest() {
+        if (dashboardRequestCounter != null) dashboardRequestCounter.increment();
+    }
+
     public List<MetricSampleDto> getCurrentSamples() {
         return List.of(
-            new MetricSampleDto("game_matches_total",
-                matchService.countTotal(), "count", Map.of("app", "groupe7")),
-            new MetricSampleDto("game_matches_active",
-                matchService.countActive(), "count", Map.of("app", "groupe7")),
-            new MetricSampleDto("game_players_active",
-                playerStatsService.countActive(), "count", Map.of("app", "groupe7")),
-            new MetricSampleDto("game_players_connected",
-                dataLoader.getServers().stream().mapToInt(s -> s.getConnectedPlayers()).sum(),
-                "count", Map.of("app", "groupe7")),
+            new MetricSampleDto("game_matches_total",    matchService.countTotal(),          "count",   Map.of("app","groupe7")),
+            new MetricSampleDto("game_matches_active",   matchService.countActive(),          "count",   Map.of("app","groupe7")),
+            new MetricSampleDto("game_players_active",   playerStatsService.countActive(),    "count",   Map.of("app","groupe7")),
+            new MetricSampleDto("game_player_kda_avg",
+                dataLoader.getPlayerStats().stream()
+                    .mapToDouble(p -> (p.getKills()+p.getAssists())/(double)Math.max(1,p.getDeaths()))
+                    .average().orElse(0),                                                    "ratio",   Map.of("app","groupe7")),
             new MetricSampleDto("game_server_load_avg",
-                dataLoader.getServers().stream().mapToDouble(s -> s.getLoad()).average().orElse(0),
-                "ratio", Map.of("app", "groupe7")),
-            new MetricSampleDto("game_match_duration_avg_seconds",
-                matchService.averageDurationSeconds(), "seconds", Map.of("app", "groupe7"))
+                dataLoader.getServers().stream().mapToDouble(s -> s.getLoad()).average().orElse(0), "ratio", Map.of("app","groupe7"))
         );
     }
 }

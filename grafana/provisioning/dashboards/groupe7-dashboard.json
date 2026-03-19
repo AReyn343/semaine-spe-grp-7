@@ -1,0 +1,144 @@
+{
+  "title": "Groupe 7 — League of Legends Monitoring",
+  "uid": "grp7-lol",
+  "schemaVersion": 36,
+  "refresh": "1s",
+  "panels": [
+
+    {
+      "id": 1, "title": "Joueurs connectés — EUW",
+      "type": "stat", "gridPos": { "x": 0, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "expr": "sum(game_players_connected_by_region{region=\"EUW\"})", "legendFormat": "EUW" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "fieldConfig": { "defaults": { "color": { "fixedColor": "blue", "mode": "fixed" } } }
+    },
+    {
+      "id": 2, "title": "Joueurs connectés — NA",
+      "type": "stat", "gridPos": { "x": 4, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "expr": "sum(game_players_connected_by_region{region=\"NA\"})", "legendFormat": "NA" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "fieldConfig": { "defaults": { "color": { "fixedColor": "orange", "mode": "fixed" } } }
+    },
+    {
+      "id": 3, "title": "Joueurs connectés — KR",
+      "type": "stat", "gridPos": { "x": 8, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "expr": "sum(game_players_connected_by_region{region=\"KR\"})", "legendFormat": "KR" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" },
+      "fieldConfig": { "defaults": { "color": { "fixedColor": "red", "mode": "fixed" } } }
+    },
+    {
+      "id": 4, "title": "KDA moyen",
+      "type": "gauge", "gridPos": { "x": 12, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "expr": "game_player_kda_avg{app=\"groupe7\"}", "legendFormat": "KDA" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "fieldConfig": { "defaults": { "min": 0, "max": 10, "thresholds": { "steps": [
+        { "color": "red", "value": 0 },
+        { "color": "yellow", "value": 2 },
+        { "color": "green", "value": 4 }
+      ]}}}
+    },
+    {
+      "id": 5, "title": "CS/min moyen",
+      "type": "gauge", "gridPos": { "x": 16, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "expr": "game_player_cs_per_min_avg{app=\"groupe7\"}", "legendFormat": "CS/min" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "fieldConfig": { "defaults": { "min": 0, "max": 12, "unit": "short", "thresholds": { "steps": [
+        { "color": "red", "value": 0 },
+        { "color": "yellow", "value": 5 },
+        { "color": "green", "value": 8 }
+      ]}}}
+    },
+    {
+      "id": 6, "title": "Alertes ouvertes",
+      "type": "stat", "gridPos": { "x": 20, "y": 0, "w": 4, "h": 4 },
+      "targets": [{ "expr": "game_alerts_open{app=\"groupe7\"}", "legendFormat": "Alertes" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" }
+    },
+
+    {
+      "id": 7, "title": "Joueurs connectés par région — historique",
+      "type": "timeseries", "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "game_players_connected_by_region{region=\"EUW\"}", "legendFormat": "EUW" },
+        { "expr": "game_players_connected_by_region{region=\"NA\"}",  "legendFormat": "NA" },
+        { "expr": "game_players_connected_by_region{region=\"KR\"}",  "legendFormat": "KR" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "short" } }
+    },
+    {
+      "id": 8, "title": "Matchs en cours par mode",
+      "type": "timeseries", "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "game_matches_active_by_mode{mode=\"RANKED_SOLO\"}",  "legendFormat": "Ranked Solo" },
+        { "expr": "game_matches_active_by_mode{mode=\"RANKED_FLEX\"}",  "legendFormat": "Ranked Flex" },
+        { "expr": "game_matches_active_by_mode{mode=\"NORMAL_DRAFT\"}", "legendFormat": "Normal Draft" },
+        { "expr": "game_matches_active_by_mode{mode=\"ARAM\"}",         "legendFormat": "ARAM" }
+      ]
+    },
+
+    {
+      "id": 9, "title": "Top champions joués",
+      "type": "bargauge", "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "topk(8, game_champion_players{app=\"groupe7\"})", "legendFormat": "{{champion}}" }
+      ],
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "horizontal",
+        "displayMode": "gradient"
+      }
+    },
+    {
+      "id": 10, "title": "Distribution des tiers",
+      "type": "bargauge", "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "game_players_by_tier{tier=\"IRON\"}",       "legendFormat": "Iron" },
+        { "expr": "game_players_by_tier{tier=\"BRONZE\"}",     "legendFormat": "Bronze" },
+        { "expr": "game_players_by_tier{tier=\"SILVER\"}",     "legendFormat": "Silver" },
+        { "expr": "game_players_by_tier{tier=\"GOLD\"}",       "legendFormat": "Gold" },
+        { "expr": "game_players_by_tier{tier=\"PLATINUM\"}",   "legendFormat": "Platinum" },
+        { "expr": "game_players_by_tier{tier=\"DIAMOND\"}",    "legendFormat": "Diamond" },
+        { "expr": "game_players_by_tier{tier=\"MASTER\"}",     "legendFormat": "Master" },
+        { "expr": "game_players_by_tier{tier=\"CHALLENGER\"}", "legendFormat": "Challenger" }
+      ],
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "horizontal",
+        "displayMode": "gradient"
+      }
+    },
+
+    {
+      "id": 11, "title": "KDA moyen — historique",
+      "type": "timeseries", "gridPos": { "x": 0, "y": 20, "w": 8, "h": 7 },
+      "targets": [{ "expr": "game_player_kda_avg{app=\"groupe7\"}", "legendFormat": "KDA moyen" }]
+    },
+    {
+      "id": 12, "title": "CS/min moyen — historique",
+      "type": "timeseries", "gridPos": { "x": 8, "y": 20, "w": 8, "h": 7 },
+      "targets": [{ "expr": "game_player_cs_per_min_avg{app=\"groupe7\"}", "legendFormat": "CS/min" }]
+    },
+    {
+      "id": 13, "title": "Charge serveurs",
+      "type": "timeseries", "gridPos": { "x": 16, "y": 20, "w": 8, "h": 7 },
+      "targets": [{ "expr": "game_server_load_avg{app=\"groupe7\"} * 100", "legendFormat": "Charge %" }],
+      "fieldConfig": { "defaults": { "unit": "percent", "min": 0, "max": 100 } }
+    },
+
+    {
+      "id": 14, "title": "Requêtes HTTP/s",
+      "type": "timeseries", "gridPos": { "x": 0, "y": 27, "w": 12, "h": 7 },
+      "targets": [{ "expr": "rate(http_server_requests_seconds_count{application=\"groupe7-monitoring\"}[30s])", "legendFormat": "{{uri}}" }]
+    },
+    {
+      "id": 15, "title": "JVM Heap Memory",
+      "type": "timeseries", "gridPos": { "x": 12, "y": 27, "w": 12, "h": 7 },
+      "targets": [
+        { "expr": "jvm_memory_used_bytes{application=\"groupe7-monitoring\", area=\"heap\"}",  "legendFormat": "Heap utilisé" },
+        { "expr": "jvm_memory_max_bytes{application=\"groupe7-monitoring\",  area=\"heap\"}",  "legendFormat": "Heap max" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "bytes" } }
+    }
+
+  ]
+}

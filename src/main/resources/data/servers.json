@@ -1,58 +1,66 @@
 [
   {
-    "serverId": "srv-eu-01",
-    "region": "EU",
-    "load": 0.74,
+    "serverId": "srv-euw-01",
+    "region": "EUW",
+    "load": 0.72,
     "healthStatus": "HEALTHY",
-    "activeMatches": 12,
-    "connectedPlayers": 142
+    "activeMatches": 18420,
+    "connectedPlayers": 184200
   },
   {
-    "serverId": "srv-eu-02",
-    "region": "EU",
-    "load": 0.45,
+    "serverId": "srv-euw-02",
+    "region": "EUW",
+    "load": 0.68,
     "healthStatus": "HEALTHY",
-    "activeMatches": 7,
-    "connectedPlayers": 89
+    "activeMatches": 15300,
+    "connectedPlayers": 153000
   },
   {
-    "serverId": "srv-eu-03",
-    "region": "EU",
+    "serverId": "srv-euw-03",
+    "region": "EUW",
     "load": 0.91,
     "healthStatus": "DEGRADED",
-    "activeMatches": 18,
-    "connectedPlayers": 201
+    "activeMatches": 21000,
+    "connectedPlayers": 210000
+  },
+  {
+    "serverId": "srv-euw-04",
+    "region": "EUW",
+    "load": 0.45,
+    "healthStatus": "HEALTHY",
+    "activeMatches": 9800,
+    "connectedPlayers": 98000
   },
   {
     "serverId": "srv-na-01",
     "region": "NA",
-    "load": 0.62,
+    "load": 0.61,
     "healthStatus": "HEALTHY",
-    "activeMatches": 9,
-    "connectedPlayers": 118
+    "activeMatches": 12400,
+    "connectedPlayers": 124000
   },
   {
     "serverId": "srv-na-02",
     "region": "NA",
     "load": 0.38,
     "healthStatus": "HEALTHY",
-    "activeMatches": 5,
-    "connectedPlayers": 67
+    "activeMatches": 7200,
+    "connectedPlayers": 72000
   },
   {
-    "serverId": "srv-as-01",
-    "region": "ASIA",
-    "load": 0.55,
+    "serverId": "srv-kr-01",
+    "region": "KR",
+    "load": 0.85,
     "healthStatus": "HEALTHY",
-    "activeMatches": 8,
-    "connectedPlayers": 95
+    "activeMatches": 24100,
+    "connectedPlayers": 241000
   },
   {
-    "serverId": "srv-as-02",
-    "region": "ASIA",
-    "load": 0.12,
+    "serverId": "srv-kr-02",
+    "region": "KR",
+    "load": 0.79,
     "healthStatus": "HEALTHY",
-    "activeMatches": 2,
-    "connectedPlayers": 24
+    "activeMatches": 19800,
+    "connectedPlayers": 198000
   }
 ]

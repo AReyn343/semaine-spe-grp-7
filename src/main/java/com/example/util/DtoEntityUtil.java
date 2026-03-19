@@ -1,14 +1,14 @@
 package com.example.util;
 
-import com.example.dto.ProfilDto;
-import com.example.entity.Profil;
+import com.example.metier.dto.ProfilDto;
+import com.example.metier.entity.PlayerStats;
 
 public class DtoEntityUtil {
 	
 
-    public static Profil profilDToToProfil(ProfilDto profilDto) {
+    public static PlayerStats profilDToToProfil(ProfilDto profilDto) {
     	
-    	Profil profil = new Profil();
+    	PlayerStats profil = new PlayerStats();
     	
     	profil.setName(profilDto.getName());
     	

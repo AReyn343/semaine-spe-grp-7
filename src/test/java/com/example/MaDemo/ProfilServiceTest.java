@@ -2,14 +2,11 @@ package com.example.MaDemo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.dto.ProfilDto;
-import com.example.entity.Profil;
 import com.example.service.ProfilService;
 
 @SpringBootTest

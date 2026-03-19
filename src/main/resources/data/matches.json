@@ -1,0 +1,90 @@
+[
+  {
+    "id": "match-001",
+    "mode": "RANKED",
+    "status": "FINISHED",
+    "durationSeconds": 1842,
+    "region": "EU",
+    "serverId": "srv-eu-01",
+    "scoreTeamA": 12,
+    "scoreTeamB": 8,
+    "createdAt": "2026-03-18T10:15:00"
+  },
+  {
+    "id": "match-002",
+    "mode": "CASUAL",
+    "status": "FINISHED",
+    "durationSeconds": 923,
+    "region": "EU",
+    "serverId": "srv-eu-02",
+    "scoreTeamA": 5,
+    "scoreTeamB": 5,
+    "createdAt": "2026-03-18T10:32:00"
+  },
+  {
+    "id": "match-003",
+    "mode": "RANKED",
+    "status": "IN_PROGRESS",
+    "durationSeconds": 0,
+    "region": "NA",
+    "serverId": "srv-na-01",
+    "scoreTeamA": 3,
+    "scoreTeamB": 7,
+    "createdAt": "2026-03-18T11:00:00"
+  },
+  {
+    "id": "match-004",
+    "mode": "TOURNAMENT",
+    "status": "FINISHED",
+    "durationSeconds": 3120,
+    "region": "EU",
+    "serverId": "srv-eu-01",
+    "scoreTeamA": 16,
+    "scoreTeamB": 14,
+    "createdAt": "2026-03-18T09:00:00"
+  },
+  {
+    "id": "match-005",
+    "mode": "CASUAL",
+    "status": "CANCELLED",
+    "durationSeconds": 120,
+    "region": "ASIA",
+    "serverId": "srv-as-01",
+    "scoreTeamA": 0,
+    "scoreTeamB": 0,
+    "createdAt": "2026-03-18T11:10:00"
+  },
+  {
+    "id": "match-006",
+    "mode": "RANKED",
+    "status": "FINISHED",
+    "durationSeconds": 2250,
+    "region": "NA",
+    "serverId": "srv-na-02",
+    "scoreTeamA": 10,
+    "scoreTeamB": 13,
+    "createdAt": "2026-03-18T08:45:00"
+  },
+  {
+    "id": "match-007",
+    "mode": "RANKED",
+    "status": "IN_PROGRESS",
+    "durationSeconds": 0,
+    "region": "EU",
+    "serverId": "srv-eu-03",
+    "scoreTeamA": 6,
+    "scoreTeamB": 6,
+    "createdAt": "2026-03-18T11:05:00"
+  },
+  {
+    "id": "match-008",
+    "mode": "TOURNAMENT",
+    "status": "PENDING",
+    "durationSeconds": 0,
+    "region": "ASIA",
+    "serverId": "srv-as-02",
+    "scoreTeamA": 0,
+    "scoreTeamB": 0,
+    "createdAt": "2026-03-18T11:15:00"
+  }
+]

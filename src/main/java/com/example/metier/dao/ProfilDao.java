@@ -1,9 +1,9 @@
-package com.example.dao;
+package com.example.metier.dao;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.dto.ProfilDto;
-import com.example.entity.Profil;
+import com.example.metier.dto.ProfilDto;
+import com.example.metier.entity.PlayerStats;
 import com.example.util.DtoEntityUtil;
 
 import jakarta.persistence.EntityManager;
@@ -17,7 +17,7 @@ public class ProfilDao {
 
     public ProfilDto save(ProfilDto profilDto) {
     	
-    	Profil profil = DtoEntityUtil.profilDToToProfil(profilDto);
+    	PlayerStats profil = DtoEntityUtil.profilDToToProfil(profilDto);
     	
     	entityManager.persist(profil);
     	
@@ -27,8 +27,8 @@ public class ProfilDao {
         
     }
     
-    public Profil findById(Long id) {
-        return entityManager.find(Profil.class, id);
+    public PlayerStats findById(Long id) {
+        return entityManager.find(PlayerStats.class, id);
     }
     
 }

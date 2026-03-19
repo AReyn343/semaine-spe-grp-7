@@ -1,0 +1,82 @@
+[
+  {
+    "playerId": "player-001",
+    "username": "ShadowStrike",
+    "winRate": 0.72,
+    "averageScore": 3450.5,
+    "elo": 2180,
+    "playTimeSeconds": 864000,
+    "totalMatches": 312,
+    "favoriteMode": "RANKED"
+  },
+  {
+    "playerId": "player-002",
+    "username": "NeonBlade",
+    "winRate": 0.58,
+    "averageScore": 2890.0,
+    "elo": 1750,
+    "playTimeSeconds": 432000,
+    "totalMatches": 187,
+    "favoriteMode": "CASUAL"
+  },
+  {
+    "playerId": "player-003",
+    "username": "FrostQueen",
+    "winRate": 0.81,
+    "averageScore": 4120.75,
+    "elo": 2540,
+    "playTimeSeconds": 1296000,
+    "totalMatches": 498,
+    "favoriteMode": "TOURNAMENT"
+  },
+  {
+    "playerId": "player-004",
+    "username": "IronVortex",
+    "winRate": 0.45,
+    "averageScore": 1980.25,
+    "elo": 1200,
+    "playTimeSeconds": 216000,
+    "totalMatches": 94,
+    "favoriteMode": "CASUAL"
+  },
+  {
+    "playerId": "player-005",
+    "username": "ArcLight",
+    "winRate": 0.65,
+    "averageScore": 3100.0,
+    "elo": 1920,
+    "playTimeSeconds": 648000,
+    "totalMatches": 241,
+    "favoriteMode": "RANKED"
+  },
+  {
+    "playerId": "player-006",
+    "username": "VoidRunner",
+    "winRate": 0.77,
+    "averageScore": 3780.5,
+    "elo": 2350,
+    "playTimeSeconds": 972000,
+    "totalMatches": 389,
+    "favoriteMode": "RANKED"
+  },
+  {
+    "playerId": "player-007",
+    "username": "CrimsonWave",
+    "winRate": 0.52,
+    "averageScore": 2410.0,
+    "elo": 1480,
+    "playTimeSeconds": 324000,
+    "totalMatches": 143,
+    "favoriteMode": "CASUAL"
+  },
+  {
+    "playerId": "player-008",
+    "username": "StormPeak",
+    "winRate": 0.69,
+    "averageScore": 3290.25,
+    "elo": 2050,
+    "playTimeSeconds": 756000,
+    "totalMatches": 276,
+    "favoriteMode": "TOURNAMENT"
+  }
+]

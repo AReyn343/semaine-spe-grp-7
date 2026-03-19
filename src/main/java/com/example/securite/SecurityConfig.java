@@ -16,21 +16,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
-            // API REST → pas de session, pas de formulaire HTML
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // On peut laisser des trucs publics si tu veux, ex:
-                // .requestMatchers("/profil.html").permitAll()
-                
-                // Tout ce qui commence par /api/ doit être authentifié
-                .requestMatchers("/api/**").authenticated()
-
-                // Le reste : on peut autoriser tout
-                .anyRequest().permitAll()
+                // Endpoints publics — dashboard, matchs, joueurs, monitoring
+                .requestMatchers(
+                    "/api/dashboard/**",
+                    "/api/matches/**",
+                    "/api/players/**",
+                    "/api/monitoring/**",
+                    "/actuator/**",
+                    "/profil.html",
+                    "/"
+                ).permitAll()
+                // Tout le reste : authentifié
+                .anyRequest().authenticated()
             )
-            // Authentification HTTP Basic (dans les headers)
             .httpBasic(Customizer.withDefaults());
 
         return http.build();
@@ -38,18 +39,11 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-
-        var user = User.withUsername("ali")
-                .password(encoder.encode("password123"))
-                .roles("USER")
-                .build();
-
         var admin = User.withUsername("admin")
                 .password(encoder.encode("admin123"))
                 .roles("ADMIN")
                 .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+        return new InMemoryUserDetailsManager(admin);
     }
 
     @Bean

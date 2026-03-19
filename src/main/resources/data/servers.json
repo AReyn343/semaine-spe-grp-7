@@ -1,0 +1,58 @@
+[
+  {
+    "serverId": "srv-eu-01",
+    "region": "EU",
+    "load": 0.74,
+    "healthStatus": "HEALTHY",
+    "activeMatches": 12,
+    "connectedPlayers": 142
+  },
+  {
+    "serverId": "srv-eu-02",
+    "region": "EU",
+    "load": 0.45,
+    "healthStatus": "HEALTHY",
+    "activeMatches": 7,
+    "connectedPlayers": 89
+  },
+  {
+    "serverId": "srv-eu-03",
+    "region": "EU",
+    "load": 0.91,
+    "healthStatus": "DEGRADED",
+    "activeMatches": 18,
+    "connectedPlayers": 201
+  },
+  {
+    "serverId": "srv-na-01",
+    "region": "NA",
+    "load": 0.62,
+    "healthStatus": "HEALTHY",
+    "activeMatches": 9,
+    "connectedPlayers": 118
+  },
+  {
+    "serverId": "srv-na-02",
+    "region": "NA",
+    "load": 0.38,
+    "healthStatus": "HEALTHY",
+    "activeMatches": 5,
+    "connectedPlayers": 67
+  },
+  {
+    "serverId": "srv-as-01",
+    "region": "ASIA",
+    "load": 0.55,
+    "healthStatus": "HEALTHY",
+    "activeMatches": 8,
+    "connectedPlayers": 95
+  },
+  {
+    "serverId": "srv-as-02",
+    "region": "ASIA",
+    "load": 0.12,
+    "healthStatus": "HEALTHY",
+    "activeMatches": 2,
+    "connectedPlayers": 24
+  }
+]

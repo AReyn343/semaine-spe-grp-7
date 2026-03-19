@@ -1,0 +1,58 @@
+{
+  "title": "Groupe 7 — Monitoring Jeu Vidéo",
+  "uid": "grp7-monitoring",
+  "schemaVersion": 36,
+  "refresh": "5s",
+  "panels": [
+    {
+      "id": 1, "title": "Joueurs connectés",
+      "type": "stat", "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "game_players_connected{app=\"groupe7\"}", "legendFormat": "Joueurs" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" }
+    },
+    {
+      "id": 2, "title": "Matchs en cours",
+      "type": "stat", "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "game_matches_active{app=\"groupe7\"}", "legendFormat": "Matchs actifs" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } }
+    },
+    {
+      "id": 3, "title": "Charge serveurs (%)",
+      "type": "gauge", "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "game_server_load_avg{app=\"groupe7\"} * 100", "legendFormat": "Charge moy." }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "minVizValue": 0, "maxVizValue": 100 }
+    },
+    {
+      "id": 4, "title": "Alertes ouvertes",
+      "type": "stat", "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+      "targets": [{ "expr": "game_alerts_open{app=\"groupe7\"}", "legendFormat": "Alertes" }],
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" }
+    },
+    {
+      "id": 5, "title": "Requêtes HTTP/s",
+      "type": "timeseries", "gridPos": { "x": 0, "y": 4, "w": 12, "h": 8 },
+      "targets": [{ "expr": "rate(http_server_requests_seconds_count{application=\"groupe7-monitoring\"}[1m])", "legendFormat": "{{method}} {{uri}}" }]
+    },
+    {
+      "id": 6, "title": "Latence HTTP p99 (ms)",
+      "type": "timeseries", "gridPos": { "x": 12, "y": 4, "w": 12, "h": 8 },
+      "targets": [{ "expr": "histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket{application=\"groupe7-monitoring\"}[1m])) by (le, uri)) * 1000", "legendFormat": "p99 {{uri}}" }]
+    },
+    {
+      "id": 7, "title": "JVM Heap Memory",
+      "type": "timeseries", "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "jvm_memory_used_bytes{application=\"groupe7-monitoring\", area=\"heap\"}", "legendFormat": "Heap utilisé" },
+        { "expr": "jvm_memory_max_bytes{application=\"groupe7-monitoring\", area=\"heap\"}", "legendFormat": "Heap max" }
+      ]
+    },
+    {
+      "id": 8, "title": "Pool HikariCP",
+      "type": "timeseries", "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "hikaricp_connections_active{application=\"groupe7-monitoring\"}", "legendFormat": "Active" },
+        { "expr": "hikaricp_connections_pending{application=\"groupe7-monitoring\"}", "legendFormat": "En attente" }
+      ]
+    }
+  ]
+}

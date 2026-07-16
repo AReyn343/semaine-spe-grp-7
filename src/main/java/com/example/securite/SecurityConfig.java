@@ -19,18 +19,14 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Endpoints publics — dashboard, matchs, joueurs, monitoring
-                .requestMatchers(
-                    "/api/dashboard/**",
-                    "/api/matches/**",
-                    "/api/players/**",
-                    "/api/monitoring/**",
-                    "/actuator/**",
-                    "/profil.html",
-                    "/"
-                ).permitAll()
-                // Tout le reste : authentifié
-                .anyRequest().authenticated()
+                // Auth endpoint — public
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                // Actuator — public pour Prometheus
+                .requestMatchers("/actuator/**").permitAll()
+                // Pages statiques
+                .requestMatchers("/", "/profil.html", "/*.html").permitAll()
+                // Tout le reste public pour la démo
+                .anyRequest().permitAll()
             )
             .httpBasic(Customizer.withDefaults());
 
@@ -41,9 +37,11 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         var admin = User.withUsername("admin")
                 .password(encoder.encode("admin123"))
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(admin);
+                .roles("ADMIN").build();
+        var ali = User.withUsername("ali")
+                .password(encoder.encode("password123"))
+                .roles("PLAYER").build();
+        return new InMemoryUserDetailsManager(admin, ali);
     }
 
     @Bean

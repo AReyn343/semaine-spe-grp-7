@@ -54,16 +54,16 @@ public class GameSimulator {
     private static final String[] TIERS   = {"IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "CHALLENGER"};
 
     private static final String[] ENDPOINTS = {
-        "/api/dashboard",
-        "/api/matches",
-        "/api/matches/search?mode=RANKED_SOLO",
-        "/api/matches/search?region=EUW",
-        "/api/matches/search?status=IN_PROGRESS",
-        "/api/players",
-        "/api/players/top?limit=5",
-        "/api/monitoring/health",
-        "/api/monitoring/metrics/current",
-        "/api/monitoring/alerts",
+        "/api/v1/dashboard",
+        "/api/v1/matches",
+        "/api/v1/matches/search?mode=RANKED_SOLO",
+        "/api/v1/matches/search?region=EUW",
+        "/api/v1/matches/search?status=IN_PROGRESS",
+        "/api/v1/players",
+        "/api/v1/players/top?limit=5",
+        "/api/v1/monitoring/health",
+        "/api/v1/monitoring/metrics/current",
+        "/api/v1/monitoring/alerts",
     };
 
     private int tickCount = 0;
@@ -113,7 +113,7 @@ public class GameSimulator {
             for (int i = 0; i < count; i++) {
                 callAsync(ENDPOINTS[random.nextInt(ENDPOINTS.length)]);
             }
-            if (random.nextInt(15) == 0) callPost("/api/monitoring/alerts/evaluate");
+            if (random.nextInt(15) == 0) callPost("/api/v1/monitoring/alerts/evaluate");
         } catch (Exception e) {
             System.err.println("[LoL Simulator] Erreur trafic : " + e.getMessage());
         }

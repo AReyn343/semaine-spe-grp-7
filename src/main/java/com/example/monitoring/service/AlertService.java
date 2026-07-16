@@ -58,7 +58,7 @@ public class AlertService {
         if (em.createQuery("SELECT COUNT(r) FROM AlertRule r", Long.class)
               .getSingleResult() > 0) return;
 
-        saveRule("server_load_high",   "game_server_load_avg",           "GT",  0.85, "WARNING",
+        saveRule("server_load_high",    "game_server_load_avg",          "GT",  0.85, "WARNING",
                  "Charge serveur moyenne > 85%");
         saveRule("server_load_critical","game_server_load_avg",          "GT",  0.95, "CRITICAL",
                  "Charge serveur moyenne > 95% — risque de panne");
@@ -67,7 +67,11 @@ public class AlertService {
         saveRule("dashboard_slow",      "http_server_requests_seconds",  "GT",  2.0,  "WARNING",
                  "Latence dashboard > 2s");
         saveRule("low_players",         "game_players_connected",        "LT",  10.0, "INFO",
-                 "Moins de 10 joueurs connectés");
+                 "Moins de 10 joueurs connectes");
+        saveRule("high_latency",        "http_server_requests_seconds",  "GT",  1.0,  "WARNING",
+                 "Latence API > 1s — degradation de performance detectee");
+        saveRule("no_matches_critical", "game_matches_active",           "LT",  1.0,  "CRITICAL",
+                 "Aucun match actif — service potentiellement down");
     }
 
     private void saveRule(String name, String metric, String op,

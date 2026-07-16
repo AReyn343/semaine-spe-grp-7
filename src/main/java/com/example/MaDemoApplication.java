@@ -13,18 +13,21 @@ public class MaDemoApplication {
         SpringApplication.run(MaDemoApplication.class, args);
     }
 
-    /**
-     * Initialise les règles d'alerte par défaut au démarrage.
-     */
     @Bean
     public CommandLineRunner initAlertRules(AlertService alertService) {
         return args -> {
             alertService.initDefaultRules();
-            System.out.println("[Groupe 7] Règles d'alerte initialisées.");
-            System.out.println("[Groupe 7] Dashboard : http://localhost:8080/api/dashboard");
-            System.out.println("[Groupe 7] Monitoring : http://localhost:8080/api/monitoring/health");
-            System.out.println("[Groupe 7] Prometheus : http://localhost:8080/actuator/prometheus");
-            System.out.println("[Groupe 7] Grafana    : http://localhost:3000");
+            System.out.println("[Groupe 7] ==========================================");
+            System.out.println("[Groupe 7] Microservice Monitoring — LoL Simulation");
+            System.out.println("[Groupe 7] ==========================================");
+            System.out.println("[Groupe 7] API (via Nginx) : http://localhost:8080/api/v1/dashboard");
+            System.out.println("[Groupe 7] Auth            : POST http://localhost:8080/api/v1/auth/login");
+            System.out.println("[Groupe 7] Health          : http://localhost:8080/api/v1/monitoring/health");
+            System.out.println("[Groupe 7] Prometheus      : http://localhost:9090");
+            System.out.println("[Groupe 7] Grafana         : http://localhost:3000  (admin/admin)");
+            System.out.println("[Groupe 7] phpMyAdmin      : http://localhost:8081  (root/root)");
+            System.out.println("[Groupe 7] 7 regles d'alerte initialisees.");
+            System.out.println("[Groupe 7] ==========================================");
         };
     }
 }

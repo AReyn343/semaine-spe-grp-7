@@ -1,5 +1,8 @@
 package com.example.metier.entity;
 
+import java.util.List;
+import java.util.Map;
+
 public class PlayerStats {
 
     private String playerId;
@@ -15,12 +18,17 @@ public class PlayerStats {
     private String champion;
     private String lane;
     private String tier;
+    private int    rank;
     private int    kills;
     private int    deaths;
     private int    assists;
-    private int    cs;             // Creep Score
+    private int    cs;
     private int    visionScore;
     private int    damageDealt;
+
+    // Domaine Économie (§D5)
+    private Map<String, Integer> wallet;   // { coins, premiumCoins }
+    private List<String>         items;    // items possédés
 
     public PlayerStats() {}
 
@@ -46,6 +54,8 @@ public class PlayerStats {
     public void setLane(String lane) { this.lane = lane; }
     public String getTier() { return tier; }
     public void setTier(String tier) { this.tier = tier; }
+    public int getRank() { return rank; }
+    public void setRank(int rank) { this.rank = rank; }
     public int getKills() { return kills; }
     public void setKills(int kills) { this.kills = kills; }
     public int getDeaths() { return deaths; }
@@ -58,4 +68,8 @@ public class PlayerStats {
     public void setVisionScore(int visionScore) { this.visionScore = visionScore; }
     public int getDamageDealt() { return damageDealt; }
     public void setDamageDealt(int damageDealt) { this.damageDealt = damageDealt; }
+    public Map<String, Integer> getWallet() { return wallet; }
+    public void setWallet(Map<String, Integer> wallet) { this.wallet = wallet; }
+    public List<String> getItems() { return items; }
+    public void setItems(List<String> items) { this.items = items; }
 }

@@ -36,4 +36,10 @@ public class PlayerStatsController {
     public List<PlayerStatsDto> top(@RequestParam(defaultValue = "5") int limit) {
         return playerStatsService.topByElo(limit);
     }
+
+    /** GET /api/v1/players/stats/global — agregats globaux de tous les joueurs */
+    @GetMapping("/stats/global")
+    public com.example.metier.dto.GlobalStatsDto getGlobalStats() {
+        return playerStatsService.getGlobalStats();
+    }
 }

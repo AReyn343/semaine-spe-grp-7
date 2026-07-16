@@ -57,3 +57,61 @@ public class PlayerStatsService {
                 .orElse(0.0);
     }
 }
+
+    // Méthode ajoutée par Momo — stats globales agrégées
+    public com.example.metier.dto.GlobalStatsDto getGlobalStats() {
+        java.util.List<com.example.metier.entity.PlayerStats> players = dataLoader.getPlayerStats();
+        com.example.metier.dto.GlobalStatsDto dto = new com.example.metier.dto.GlobalStatsDto();
+
+        dto.setTotalPlayers(players.size());
+
+        dto.setAvgElo(players.stream().mapToInt(p -> p.getElo()).average().orElse(0));
+
+        dto.setAvgKda(players.stream()
+            .mapToDouble(p -> (p.getKills() + p.getAssists()) / (double) Math.max(1, p.getDeaths()))
+            .average().orElse(0));
+
+        dto.setAvgCsPerMin(players.stream()
+            .filter(p -> p.getPlayTimeSeconds() > 60)
+            .mapToDouble(p -> p.getCs() / (p.getPlayTimeSeconds() / 60.0))
+            .average().orElse(0));
+
+        dto.setAvgWinRate(players.stream().mapToDouble(p -> p.getWinRate()).average().orElse(0));
+
+        // Tier le plus représenté
+        dto.setTopTier(players.stream()
+            .collect(java.util.stream.Collectors.groupingBy(
+                p -> p.getTier(), java.util.stream.Collectors.counting()))
+            .entrySet().stream()
+            .max(java.util.Map.Entry.comparingByValue())
+            .map(java.util.Map.Entry::getKey).orElse("N/A"));
+
+        // Champion le plus joué
+        dto.setMostPlayedChampion(players.stream()
+            .collect(java.util.stream.Collectors.groupingBy(
+                p -> p.getChampion(), java.util.stream.Collectors.counting()))
+            .entrySet().stream()
+            .max(java.util.Map.Entry.comparingByValue())
+            .map(java.util.Map.Entry::getKey).orElse("N/A"));
+
+        // Total coins en circulation
+        dto.setTotalCoinsInCirculation(players.stream()
+            .filter(p -> p.getWallet() != null)
+            .mapToInt(p -> p.getWallet().getOrDefault("coins", 0))
+            .sum());
+
+        // Répartition par tier
+        dto.setPlayersByTier(players.stream()
+            .collect(java.util.stream.Collectors.groupingBy(
+                p -> p.getTier(), java.util.stream.Collectors.counting())));
+
+        // Répartition par lane
+        dto.setPlayersByLane(players.stream()
+            .collect(java.util.stream.Collectors.groupingBy(
+                p -> p.getLane(), java.util.stream.Collectors.counting())));
+
+        // Top 3 par ELO
+        dto.setTop3ByElo(topByElo(3));
+
+        return dto;
+    }
